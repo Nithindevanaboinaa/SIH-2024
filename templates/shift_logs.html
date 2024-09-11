@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shift Logs</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #222;
+        color: #ffcc00;
+      }
+      .card-custom {
+        background-color: #333;
+        border: none;
+        margin-bottom: 20px;
+      }
+      .card-header {
+        background-color: #444;
+      }
+      .btn-custom {
+        background-color: #ffcc00;
+        color: #333;
+      }
+      .filter-form {
+        background-color: #444;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 5px;
+      }
+
+      /* Sidebar styling for mobile view */
+      #sidebarMenu {
+        display: none; /* Always hide by default */
+      }
+
+      @media (max-width: 992px) {
+        #sidebarMenu {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 250px;
+          height: 100%;
+          background-color: #333;
+          overflow-x: hidden;
+          transition: 0.3s;
+          padding-top: 60px;
+        }
+
+        #sidebarMenu a {
+          padding: 8px 8px 8px 32px;
+          text-decoration: none;
+          font-size: 18px;
+          color: #ffcc00;
+          display: block;
+          transition: 0.3s;
+        }
+
+        #sidebarMenu a:hover {
+          color: #ffcc00;
+        }
+
+        #sidebarMenu .closebtn {
+          position: absolute;
+          top: 0;
+          right: 20px;
+          font-size: 36px;
+          margin-left: 50px;
+        }
+
+        /* Show sidebar when toggled */
+        #sidebarMenu.show {
+          display: block;
+        }
+
+        .navbar-toggler {
+          position: absolute;
+          right: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Mine Management</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        onclick="toggleSidebar()"
+        aria-label="Toggle sidebar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('dashboard')}}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('shift_logs')}}">Shift Logs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('smp')}}">SMP Entry</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('history')}}">History</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Sidebar for mobile view only -->
+    <div id="sidebarMenu">
+      <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()"
+        >&times;</a
+      >
+      <a href="{{url_for('dashboard')}}">Dashboard</a>
+      <a href="{{url_for('shift_logs')}}">Shift Logs</a>
+      <a href="{{url_for('smp')}}">SMP Entry</a>
+      <a href="{{url_for('history')}}">History</a>
+      <a href="{{url_for('logout')}}">Logout</a>
+    </div>
+
+    <!-- Main content -->
+    <div class="container mt-5">
+      <h1 class="text-center">Shift Logs</h1>
+
+      <!-- Log Submission Form -->
+      <form action="/shift_logs" method="post">
+        <div class="form-group">
+          <label for="start_time">Start Time</label>
+          <input type="text" name="start_time" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for="end_time">End Time</label>
+          <input type="text" name="end_time" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label for="no_of_workers">No of Workers</label>
+          <input
+            type="text"
+            name="no_of_workers"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="coal_production">Coal Produced per shift</label>
+          <input
+            type="text"
+            name="coal_production"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="tasks_completed">Tasks Completed</label>
+          <textarea
+            name="tasks_completed"
+            class="form-control"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="red_flags">Red Flags</label>
+          <textarea
+            name="red_flags"
+            class="form-control"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-custom btn-block">
+          Submit Log
+        </button>
+      </form>
+
+      <!-- Logs display container (for filtered logs) -->
+      <div id="logsContainer"></div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Sidebar JS -->
+    <script>
+      function toggleSidebar() {
+        var sidebar = document.getElementById("sidebarMenu");
+        if (sidebar.classList.contains("show")) {
+          sidebar.classList.remove("show");
+        } else {
+          sidebar.classList.add("show");
+        }
+      }
+    </script>
+
+    <!-- JavaScript for Filtering Logs -->
+    <script>
+      document
+        .getElementById("filterForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const startTime = document.getElementById("start_time_filter").value;
+          const endTime = document.getElementById("end_time_filter").value;
+
+          fetch(`/filter_logs?start_time=${startTime}&end_time=${endTime}`)
+            .then((response) => response.json())
+            .then((data) => {
+              const logsContainer = document.getElementById("logsContainer");
+              logsContainer.innerHTML = ""; // Clear existing logs
+
+              if (data.length === 0) {
+                logsContainer.innerHTML = "<p>No logs found.</p>";
+              } else {
+                data.forEach((log) => {
+                  const logElement = `
+                  <div class="card card-custom">
+                    <div class="card-header">
+                      <strong>Start Time:</strong> ${log.start_time}
+                    </div>
+                    <div class="card-body">
+                      <p><strong>End Time:</strong> ${log.end_time}</p>
+                      <p><strong>Tasks Completed:</strong> ${log.tasks_completed}</p>
+                      <p><strong>Red Flags:</strong> ${log.red_flags}</p>
+                      <p><strong>No of Workers:</strong> ${log.no_of_workers}</p>
+                      <p><strong>Coal Produced:</strong> ${log.coal_production}</p>
+                      <a href="/generate_report/${log._id}" class="btn btn-custom">Generate PDF Report</a>
+                    </div>
+                  </div>
+                `;
+                  logsContainer.innerHTML += logElement;
+                });
+              }
+            });
+        });
+    </script>
+  </body>
+</html>

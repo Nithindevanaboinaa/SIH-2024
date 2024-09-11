@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift Log Entry</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mt-5">Shift Log Entry</h2>
+        <form action="/submit_shift_log" method="POST" class="mt-4">
+            <div class="form-group">
+                <label for="start_time">Start Time</label>
+                <input type="datetime-local" class="form-control" id="start_time" name="start_time" required>
+            </div>
+            <div class="form-group">
+                <label for="end_time">End Time</label>
+                <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
+            </div>
+            <div class="form-group">
+                <label for="tasks_completed">Tasks Completed</label>
+                <textarea class="form-control" id="tasks_completed" name="tasks_completed" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="red_flags">Red Flags</label>
+                <textarea class="form-control" id="red_flags" name="red_flags" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Submit Log</button>
+        </form>
+    </div>
+</body>
+</html>

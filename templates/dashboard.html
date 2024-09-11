@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Mine Management System</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      #highTempData {
+        color: white; /* Set text color to white */
+      }
+      body {
+        background-color: #333;
+        color: #fff;
+      }
+      .navbar {
+        background-color: #444;
+      }
+      .card {
+        background-color: #555;
+      }
+      .card-header {
+        background-color: #666;
+      }
+      .btn-custom {
+        background-color: #ffcc00;
+        color: #333;
+      }
+      .chart-container {
+        background-color: #444;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      /* Sidebar styling for mobile view */
+      #sidebarMenu {
+        display: none;
+      }
+
+      @media (max-width: 992px) {
+        #sidebarMenu {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 250px;
+          height: 100%;
+          background-color: #333;
+          overflow-x: hidden;
+          transition: 0.3s;
+          padding-top: 60px;
+        }
+
+        #sidebarMenu a {
+          padding: 8px 8px 8px 32px;
+          text-decoration: none;
+          font-size: 18px;
+          color: #ffcc00;
+          display: block;
+          transition: 0.3s;
+        }
+
+        #sidebarMenu a:hover {
+          color: #ffcc00;
+        }
+
+        #sidebarMenu .closebtn {
+          position: absolute;
+          top: 0;
+          right: 20px;
+          font-size: 36px;
+          margin-left: 50px;
+        }
+
+        /* Show sidebar when toggled */
+        #sidebarMenu.show {
+          display: block;
+        }
+
+        .navbar-toggler {
+          position: absolute;
+          right: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Mine Management</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        onclick="toggleSidebar()"
+        aria-label="Toggle sidebar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('dashboard')}}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('shift_logs')}}">Shift Logs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('smp')}}">SMP Entry</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('history')}}">History</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Sidebar for mobile view only -->
+    <div id="sidebarMenu">
+      <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()"
+        >&times;</a
+      >
+      <a href="{{url_for('dashboard')}}">Dashboard</a>
+      <a href="{{url_for('shift_logs')}}">Shift Logs</a>
+      <a href="{{url_for('smp')}}">SMP Entry</a>
+      <a href="{{url_for('history')}}">History</a>
+      <a href="{{url_for('logout')}}">Logout</a>
+    </div>
+    <!-- Dashboard Section -->
+    <div class="container mt-4">
+      <h2 class="text-center mb-4">Dashboard</h2>
+
+      <!-- Row for Charts -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="chart-container">
+            <canvas id="productivityChart"></canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="chart-container">
+            <canvas id="safetyIncidentsChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Performance Indicators (KPIs) -->
+      <div class="row mt-5">
+        <div class="col-md-4">
+          <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Total Logs</div>
+            <div class="card-body">
+              <h5 class="card-title">150</h5>
+              <p class="card-text">Logs recorded this month.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-success mb-3">
+            <div class="card-header">Completed Tasks</div>
+            <div class="card-body">
+              <h5 class="card-title">120</h5>
+              <p class="card-text">Tasks completed by operators.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-danger mb-3">
+            <div class="card-header">Safety Incidents</div>
+            <div class="card-body">
+              <h5 class="card-title">5</h5>
+              <p class="card-text">Incidents reported this month.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container mt-5">
+      <h2>Alerts</h2>
+      <div id="highTempData">
+        <!-- The sensor data will be displayed here -->
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Chart.js Initialization -->
+    <script>
+      var ctxProductivity = document
+        .getElementById("productivityChart")
+        .getContext("2d");
+      var productivityChart = new Chart(ctxProductivity, {
+        type: "bar",
+        data: {
+          labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+          datasets: [
+            {
+              label: "Productivity",
+              data: [12, 19, 3, 5],
+              backgroundColor: "rgba(255, 204, 0, 0.5)", // Accent color (Yellow)
+              borderColor: "rgba(255, 204, 0, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+      });
+
+      var ctxSafetyIncidents = document
+        .getElementById("safetyIncidentsChart")
+        .getContext("2d");
+      var safetyIncidentsChart = new Chart(ctxSafetyIncidents, {
+        type: "pie",
+        data: {
+          labels: ["Low", "Medium", "High", "Critical"],
+          datasets: [
+            {
+              label: "Safety Incidents",
+              data: [5, 2, 2, 1],
+              backgroundColor: [
+                "rgba(75, 192, 192, 0.5)",
+                "rgba(255, 206, 86, 0.5)",
+                "rgba(255, 99, 132, 0.5)",
+                "rgba(153, 102, 255, 0.5)",
+              ],
+              borderColor: [
+                "rgba(75, 192, 192, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(153, 102, 255, 1)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        },
+      });
+
+      function toggleSidebar() {
+        var sidebar = document.getElementById("sidebarMenu");
+        if (sidebar.classList.contains("show")) {
+          sidebar.classList.remove("show");
+        } else {
+          sidebar.classList.add("show");
+        }
+      }
+
+      // Function to fetch data from the /high-temperature endpoint
+      function fetchHighTemperatureData() {
+        fetch("/high-temperature")
+          .then((response) => response.json())
+          .then((data) => {
+            // Get the div where we want to display the data
+            const dataDiv = document.getElementById("highTempData");
+
+            if (data.length > 0) {
+              // Create a table to display the data
+              let table = `<table class="table table-bordered mt-3">
+                                  <thead class="table-dark">
+                                      <tr>
+                                          <th>Equipment ID</th>
+                                          <th>Sensor Type</th>
+                                          <th>Sensor Reading</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>`;
+
+              // Iterate over the data and create table rows
+              data.forEach((sensor) => {
+                table += `<tr>
+                                  <td>${sensor.Equipment_ID}</td>
+                                  <td>${sensor.Sensor_Type}</td>
+                                  <td>${sensor.Sensor_Reading}</td>
+                                </tr>`;
+              });
+
+              table += "</tbody></table>";
+
+              // Insert the table into the div
+              dataDiv.innerHTML = table;
+            } else {
+              dataDiv.innerHTML =
+                "<p>No high temperature sensor readings found.</p>";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            document.getElementById("highTempData").innerHTML =
+              "<p>Error loading data.</p>";
+          });
+      }
+
+      // Call the function when the page loads
+      window.onload = fetchHighTemperatureData;
+    </script>
+  </body>
+</html>

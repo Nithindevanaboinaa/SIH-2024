@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Previous Logs</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #333;
+        color: #ffcc00;
+        padding: 20px;
+      }
+      .log-entry {
+        background-color: #444;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+      .btn-warning {
+        background-color: #ffcc00;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Previous Logs</h2>
+      <div class="logs">
+        <!-- Loop through the logs and render each log with its PDF button -->
+        {% for log in logs %}
+        <div class="log-entry">
+          <p><strong>Start Time:</strong> {{ log.start_time }}</p>
+          <p><strong>End Time:</strong> {{ log.end_time }}</p>
+          <p><strong>Tasks Completed:</strong> {{ log.tasks_completed }}</p>
+          <p><strong>Red Flags:</strong> {{ log.red_flags }}</p>
+          <p><strong>No of Workers:</strong> {{ log.no_of_workers }}</p>
+          <p><strong>Coal Produced:</strong> {{ log.coal_production }}</p>
+
+          <!-- Generate PDF Button for each log -->
+          <a href="/generate_report/{{ log._id }}" class="btn btn-warning"
+            >Generate PDF Report</a
+          >
+        </div>
+        <hr />
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

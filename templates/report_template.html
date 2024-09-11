@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Shift Log Report</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      h1 {
+        color: #ffcc00;
+      }
+      .log-info {
+        margin-bottom: 20px;
+      }
+      .log-info p {
+        margin: 5px 0;
+      }
+      .btn {
+        background-color: #ffcc00;
+        padding: 10px;
+        color: #333;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Shift Log Report</h1>
+    <div class="log-info">
+      <p><strong>Start Time:</strong> {{ log.start_time }}</p>
+      <p><strong>End Time:</strong> {{ log.end_time }}</p>
+      <p><strong>Tasks Completed:</strong> {{ log.tasks_completed }}</p>
+      <p><strong>Red Flags:</strong> {{ log.red_flags }}</p>
+      <p><strong>No of Workers:</strong> {{ log.no_of_workers }}</p>
+      <p><strong>Coal Produced:</strong> {{ log.coal_production }}</p>
+    </div>
+  </body>
+</html>

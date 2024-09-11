@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SMP Entry</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #333;
+        color: #fff;
+      }
+
+      .container {
+        background-color: #444;
+        padding: 30px;
+        border-radius: 8px;
+        margin-top: 50px;
+      }
+
+      .form-control {
+        background-color: #555;
+        color: #fff;
+        border: 1px solid #666;
+      }
+
+      .form-control:focus {
+        background-color: #666;
+        color: #fff;
+      }
+
+      .btn-custom {
+        background-color: #ffcc00;
+        color: #333;
+      }
+
+      /* Sidebar styling for mobile view */
+      #sidebarMenu {
+        display: none; /* Always hide by default */
+      }
+
+      @media (max-width: 992px) {
+        #sidebarMenu {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 250px;
+          height: 100%;
+          background-color: #333;
+          overflow-x: hidden;
+          transition: 0.3s;
+          padding-top: 60px;
+        }
+
+        #sidebarMenu a {
+          padding: 8px 8px 8px 32px;
+          text-decoration: none;
+          font-size: 18px;
+          color: #ffcc00;
+          display: block;
+          transition: 0.3s;
+        }
+
+        #sidebarMenu a:hover {
+          color: #ffcc00;
+        }
+
+        #sidebarMenu .closebtn {
+          position: absolute;
+          top: 0;
+          right: 20px;
+          font-size: 36px;
+          margin-left: 50px;
+        }
+
+        /* Show sidebar when toggled */
+        #sidebarMenu.show {
+          display: block;
+        }
+
+        .navbar-toggler {
+          position: absolute;
+          right: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Mine Management</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        onclick="toggleSidebar()"
+        aria-label="Toggle sidebar"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('dashboard')}}">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('shift_logs')}}">Shift Logs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('smp')}}">SMP Entry</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('history')}}">History</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Sidebar for mobile view only -->
+    <div id="sidebarMenu">
+      <a href="javascript:void(0)" class="closebtn" onclick="toggleSidebar()"
+        >&times;</a
+      >
+      <a href="{{url_for('dashboard')}}">Dashboard</a>
+      <a href="{{url_for('shift_logs')}}">Shift Logs</a>
+      <a href="{{url_for('smp')}}">SMP Entry</a>
+      <a href="{{url_for('history')}}">History</a>
+      <a href="{{url_for('logout')}}">Logout</a>
+    </div>
+    <!-- SMP Form -->
+    <div class="container">
+      <h2 class="text-center mt-3">Safety Management Plan (SMP) Entry</h2>
+      <form action="/submit_smp" method="POST" class="mt-4">
+        <div class="form-group">
+          <label for="hazard">Hazard Identification</label>
+          <textarea
+            class="form-control"
+            id="hazard"
+            name="hazard"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="control">Control Mechanisms</label>
+          <textarea
+            class="form-control"
+            id="control"
+            name="control"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="monitoring">Monitoring Responsibility</label>
+          <textarea
+            class="form-control"
+            id="monitoring"
+            name="monitoring"
+            rows="3"
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-custom btn-block">
+          Submit SMP
+        </button>
+      </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Sidebar JS -->
+    <script>
+      function toggleSidebar() {
+        var sidebar = document.getElementById("sidebarMenu");
+        if (sidebar.classList.contains("show")) {
+          sidebar.classList.remove("show");
+        } else {
+          sidebar.classList.add("show");
+        }
+      }
+    </script>
+  </body>
+</html>

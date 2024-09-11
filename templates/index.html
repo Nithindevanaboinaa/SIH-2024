@@ -1,0 +1,33 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Equipment Failure Prediction</title>
+  </head>
+  <body>
+    <h1>Manual Input for Equipment Failure Prediction</h1>
+    <form action="/predict" method="post">
+      <label for="equipment_id">Equipment ID:</label>
+      <input type="text" id="equipment_id" name="equipment_id" required />
+      <br /><br />
+
+      <label for="sensor_type">Sensor Type:</label>
+      <input type="text" id="sensor_type" name="sensor_type" required />
+      <br /><br />
+
+      <label for="sensor_reading">Sensor Reading:</label>
+      <input
+        type="number"
+        id="sensor_reading"
+        name="sensor_reading"
+        step="any"
+        required
+      />
+      <br /><br />
+
+      <button type="submit">Predict Failure</button>
+    </form>
+  </body>
+</html>

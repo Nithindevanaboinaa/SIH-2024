@@ -1,0 +1,45 @@
+/* Base styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.sidebar {
+  background-color: #343a40;
+  color: #ffffff;
+  padding: 15px;
+}
+
+.sidebar-header h4 {
+  color: #ffffff;
+}
+
+.nav-link {
+  color: #cfd0d1;
+}
+
+.nav-link.active {
+  color: #ffffff;
+  background-color: #495057;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  background-color: #495057;
+}
+
+.content {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3, h4 {
+  color: #343a40;
+}
+
+.table thead th {
+  background-color: #343a40;
+  color: #ffffff;
+}

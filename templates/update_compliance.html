@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Compliance</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #222;
+            color: #ffcc00;
+        }
+        .btn-custom {
+            background-color: #ffcc00;
+            color: #333;
+        }
+        .card-custom {
+            background-color: #333;
+            border: none;
+            padding: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card card-custom mx-auto">
+            <h3 class="text-center">Update Compliance</h3>
+            <form action="/update_compliance/{{ compliance._id }}" method="post">
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select name="status" class="form-control" required>
+                        <option value="Compliant" {% if compliance.status == 'Compliant' %}selected{% endif %}>Compliant</option>
+                        <option value="Non-Compliant" {% if compliance.status == 'Non-Compliant' %}selected{% endif %}>Non-Compliant</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-custom btn-block">Update Compliance</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
